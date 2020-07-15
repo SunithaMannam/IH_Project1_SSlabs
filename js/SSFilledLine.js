@@ -178,7 +178,8 @@ class SSFilledLine {
                 if ((ele.yPosition - slab.height === slab.yPosition) && (ele.xPosition === (slab.xPosition + slab.width))) {
                     retVal = true;
                 }
-            } else if ((ele.yPosition - slab.height === slab.yPosition) && (ele.xPosition === slab.xPosition)) {
+            }
+            if ((ele.yPosition - slab.height === slab.yPosition) && (ele.xPosition === slab.xPosition)) {
                 retVal = true;
             }
 
