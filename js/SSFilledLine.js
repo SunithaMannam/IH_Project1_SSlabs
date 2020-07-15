@@ -123,7 +123,11 @@ class SSFilledLine {
     isLeftFull(slab) {
         let retVal = false;
         this.arrSlabs.forEach((ele) => {
-
+            if (slab.slabsAlign === 'V') {
+                if ((ele.xPosition + ele.width === slab.xPosition) && (ele.yPosition === slab.yPosition + (slab.height * slab.noOfSlabs))) {
+                    retVal = true;
+                }
+            }
             if ((ele.xPosition + ele.width === slab.xPosition) && (ele.yPosition === slab.yPosition)) {
                 retVal = true;
             }
@@ -142,16 +146,16 @@ class SSFilledLine {
         let retVal = false;
         this.arrSlabs.forEach((ele) => {
             console.log("isRightFull() --  " + ele.xPosition + " slab-Y: " + slab.yPosition + "slab-x: " + slab.xPosition);
-            if (slab.noOfSlabs > 1 && slab.slabsAlign === 'H') {
+            if (slab.slabsAlign === 'H') {
                 if ((slab.xPosition + slab.width === ele.xPosition - slab.width) && (ele.yPosition === slab.yPosition)) {
                     retVal = true;
                 }
-            } else {
-                if ((ele.xPosition === slab.xPosition + slab.width) && (ele.yPosition === slab.yPosition)) {
-                    retVal = true;
-                }
+            } else if ((slab.slabsAlign === 'V') && ((ele.xPosition === slab.xPosition + slab.width) && (ele.yPosition === slab.yPosition + slab.height))) {
+                retVal = true;
             }
-
+            if ((ele.xPosition === slab.xPosition + slab.width) && (ele.yPosition === slab.yPosition)) {
+                retVal = true;
+            }
         });
         return retVal;
     }
@@ -166,13 +170,15 @@ class SSFilledLine {
         let retVal = false;
         console.log(" inBottomFull: " + slab.noOfSlabs)
         this.arrSlabs.forEach((ele) => {
-
-            if (slab.noOfSlabs > 1) {
+            if (slab.slabsAlign === 'V') {
+                if ((ele.yPosition - (slab.height * slab.noOfSlabs) === slab.yPosition) && (ele.xPosition === slab.xPosition)) {
+                    retVal = true;
+                }
+            } else if (slab.slabsAlign === 'H') {
                 if ((ele.yPosition - slab.height === slab.yPosition) && (ele.xPosition === (slab.xPosition + slab.width))) {
                     retVal = true;
                 }
-            }
-            if ((ele.yPosition - slab.height === slab.yPosition) && (ele.xPosition === slab.xPosition)) {
+            } else if ((ele.yPosition - slab.height === slab.yPosition) && (ele.xPosition === slab.xPosition)) {
                 retVal = true;
             }
 

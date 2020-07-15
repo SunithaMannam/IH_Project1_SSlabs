@@ -18,7 +18,7 @@ class SSGame {
         this.gameTimer = undefined;
         this.drawTimer = undefined;
         this.score = 0;
-        this.colors = ["deepSkyBlue", "yellowGreen", "yellow", "wheat", "magenta", "beige"];
+        this.colors = ["BlueViolet", "Green", "yellow", "wheat", "magenta", "Aqua"];
     }
 
     /**
@@ -36,7 +36,6 @@ class SSGame {
         this.arrAllLines = [];
         this.gameCtx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.audioElement = new Audio('sound/line-fill.mp3');
-
         this.start();
         // this.startNewSlab();
     }
@@ -45,6 +44,7 @@ class SSGame {
      *  Start the Sliding  Slabs Game
      * */
     start() {
+        this.clearCanvas();
         this.gameCtx.beginPath();
         /**
          * Timer todo below tasks repeatedly: 
@@ -58,6 +58,7 @@ class SSGame {
                 // this.arrAllLines.forEach((eachLine) => {
                 // 3. Check for lines full and remove the fully formed lines                    
                 this.setFilledLine();
+
                 this.drawTimer = setInterval(() => {
                     this.drawFilledLines();
                     this.drawPartialLines();
@@ -69,7 +70,7 @@ class SSGame {
                     this.changePositions();
                     this.clearCanvas();
                     this.drawPartialLines();
-                }, 1000 / 5);
+                }, 1000 / 5); //5
             }
             //2. Trigger a new fallling slab,if previous slab hit the bottom
             if (!this.isSlabFalling) {
@@ -80,7 +81,7 @@ class SSGame {
                 console.log(`collised with top game over !! ${this.arrAllLines.length} `);
                 this.stopGame();
             }
-        }, 1000 / 1);
+        }, 1000 / 1); // 1
         // console.log(" inside SSGame-> start()"); // + this.simpleSlab.xPosition + " " + this.simpleSlab.yPosition);
     }
 
@@ -97,7 +98,8 @@ class SSGame {
         // this.randXPos = (Math.floor(Math.random() * this.width));
         // this.randXPos = (this.randXPos < 25 ? 0 : Math.floor(this.randXPos / 25)) * 25;
         this.randXPos = Math.floor(this.width / 2);
-        let slabCnt = Math.floor(Math.random() * 2);
+        let slabCnt = Math.floor(Math.random() * 3);
+        // let slabCnt = 2; //-- for testing purpose
         slabCnt++;
         console.log(" slab count: " + slabCnt);
         this.simpleSlab = new Slab();
@@ -110,60 +112,88 @@ class SSGame {
      *  */
     addSlabToLines(slab) {
         // console.log("addSlabToLines() -> this.arrAllLines.length :   " + this.arrAllLines.length);
-        // console.log(` addSlabToKines: ${slab.xPosition}, ${slab.yPosition}`);
+        console.log(` addSlabToKines: ${slab.xPosition}, ${slab.yPosition}`);
         // case 1: there are no lines 
         const arrLen = this.arrAllLines.length;
         if (arrLen === 0) {
             console.log(" addSlabToLines : case 1 ");
             // create a new line and add to array
-            if (slab.noOfSlabs > 1) {
-                let temp = slab.noOfSlabs;
-                if (slab.slabsAlign === 'V') {
-                    console.log(" addSlabToLines :  vertical slab ");
-                    temp--;
-                    while (temp > 0) {
-                        let newLine = new SSFilledLine();
-                        let newSlab = new Slab();
-                        newSlab.deepCopy(slab);
-                        newSlab.yPosition += slab.height;
-                        newLine.addSlab(newSlab);
-                        this.arrAllLines.push(newLine);
-                        temp--;
-                    }
-                } else {
-                    console.log(" addSlabToLines :  normal slab ");
-                    let newLine = new SSFilledLine();
-                    newLine.addSlab(slab);
-                    this.arrAllLines.push(newLine);
-                }
-
-            } else {
-                console.log(" addSlabToLines :  normal slab ");
-                let newLine = new SSFilledLine();
-                newLine.addSlab(slab);
-                this.arrAllLines.push(newLine);
-
-            }
-
-        } else if (this.arrAllLines[arrLen - 1].topY === slab.yPosition + slab.height) {
-            // console.log(" addSlabToLines : case 2 ");
-            // add a new line, as slab has hit the opt horizontal line
+            console.log(" addSlabToLines :  normal slab ");
             let newLine = new SSFilledLine();
+            this.addVerticalSlab(slab);
+            newLine.addSlab(slab);
+            this.arrAllLines.push(newLine);
+
+        } else if ((this.arrAllLines[arrLen - 1].topY === slab.yPosition + (slab.height * slab.noOfSlabs)) && slab.slabsAlign === 'V') {
+            console.log(" addSlabToLines : case 2 ");
+            // add a new line, as slab has hit the opt horizontal line11
+            let newLine = new SSFilledLine();
+            this.addVerticalSlab(slab);
+            newLine.addSlab(slab);
+            this.arrAllLines.push(newLine);
+        } else if (this.arrAllLines[arrLen - 1].topY === slab.yPosition + slab.height) {
+            let newLine = new SSFilledLine();
+            if (slab.slabsAlign === 'V') {
+                this.addVerticalSlab(slab);
+            }
             newLine.addSlab(slab);
             this.arrAllLines.push(newLine);
         } else {
-            // console.log(" addSlabToLines : case 3 ");
+            console.log(" addSlabToLines : case 3 ");
             // slab hit a line that is not the top
             let line = this.getHorizontalLine(slab);
             if (typeof line != 'undefined') {
-                // console.log(" addSlabToLines : case 3 -> line found ");
+                console.log(" addSlabToLines : case 3 -> line found ");
                 if (line.topY === slab.yPosition) {
-                    // console.log(" addSlabToLines : case 3 -> line found -> y position matches");
+                    console.log(" addSlabToLines : case 3 -> line found -> y position matches");
                     line.addSlab(slab);
+                    if (slab.slabsAlign === 'V') {
+                        this.addBelowSlabtoLine(slab);
+                    }
                 }
             }
         }
+        this.printallLines();
         // console.log(" AAA: " + this.arrAllLines.length);
+    }
+
+    printallLines() {
+        console.log("=====" + this.arrAllLines.length + "=====");
+        this.arrAllLines.forEach((ele, idx) => {
+            ele.arrSlabs.forEach((slab) => {
+                console.log(`line: ${idx} : slab[${slab.xPosition},${slab.yPosition}] has color ${slab.color} - align: ${slab.slabsAlign}`);
+            });
+        });
+        console.log("==========");
+    }
+
+    addBelowSlabtoLine(slab) {
+        this.arrAllLines.forEach((ele, idx, line) => {
+            if (ele.topY === slab.yPosition) {
+                let newSlab = new Slab();
+                newSlab.deepCopy(slab);
+                newSlab.yPosition += slab.height;
+                line[idx - 1].addSlab(newSlab);
+            }
+        });
+    }
+
+
+    addVerticalSlab(slab) {
+        let temp = slab.noOfSlabs;
+        if (temp > 1 && slab.slabsAlign === 'V') {
+            console.log(" addSlabToLines :  vertical slab ");
+            temp--;
+            while (temp > 0) {
+                let newLine = new SSFilledLine();
+                let newSlab = new Slab();
+                newSlab.deepCopy(slab);
+                newSlab.yPosition += slab.height;
+                newLine.addSlab(newSlab);
+                this.arrAllLines.push(newLine);
+                temp--;
+            }
+        }
     }
 
 
@@ -195,16 +225,22 @@ class SSGame {
             } else {
                 let retVal = false;
                 this.arrAllLines.forEach((eachline) => {
-                    console.log("isLineCollision() --  " + eachline.topY + " slab-Y: " + slab.yPosition + "slab-x: " + slab.xPosition);
-                    if (slab.noOfSlabs > 1) {
+                    // console.log("isLineCollision() --  " + eachline.topY + " slab-Y: " + slab.yPosition + "slab-x: " + slab.xPosition);
+                    if (slab.slabsAlign === 'H') {
                         if (slab.yPosition + slab.height === eachline.topY && eachline.isSlotFull(slab.xPosition + slab.width)) {
-                            // console.log(" isLineCollision() -- slab collided with one of lines");
+                            // console.log(" isLineCollision() -- horizontal slab collided with one of lines");
+                            this.isSlabFalling = false;
+                            retVal = true;
+                        }
+                    } else if (slab.slabsAlign === 'V') {
+                        if (slab.yPosition + (slab.height * slab.noOfSlabs) === eachline.topY && eachline.isSlotFull(slab.xPosition)) {
+                            // console.log(" isLineCollision() -- vertical slab collided with one of lines");
                             this.isSlabFalling = false;
                             retVal = true;
                         }
                     }
                     if (slab.yPosition + slab.height === eachline.topY && eachline.isSlotFull(slab.xPosition)) {
-                        console.log(" isLineCollision() -- slab collided with one of lines");
+                        // console.log(" isLineCollision() -- slab collided with one of lines");
                         this.isSlabFalling = false;
                         retVal = true;
                     }
@@ -241,7 +277,6 @@ class SSGame {
     }
 
 
-
     /**
      * returns true, if right position of the slab is full => there is a right collision
      * @param {*} slab 
@@ -259,7 +294,6 @@ class SSGame {
                             isRightCollide = true;
                         }
                     });
-
                 });
                 return isRightCollide;
             }
@@ -285,67 +319,12 @@ class SSGame {
                             isBottomCollide = true;
                         }
                     });
-
                 });
                 return isBottomCollide;
             }
         }
     }
 
-    // ========  working properly ========
-    // drawFilledLines() {
-    //     console.log(" draw filled lines called ");
-    //     if (this.arrAllLines.length > 0) {
-    //         let audioElement = new Audio('sound/line-fill.mp3');
-    //         const intervalId = setInterval(() => {
-
-    //             this.arrAllLines.forEach((eachLine, idx) => {
-
-    //                 if (eachLine.isLineFull) {
-    //                     console.log(` while drawing : ${idx}: top-y: ${eachLine.topY} , bottom-y: ${eachLine.bottomY}`);
-    //                     this.gameCtx.fillStyle = "white";
-    //                     this.gameCtx.strokeStyle = "#701007";
-    //                     this.gameCtx.lineWidth = 3;
-    //                     this.gameCtx.shadowColor = "black";
-    //                     this.gameCtx.shadowBlur = 20;
-
-    //                     this.gameCtx.fillRect(
-    //                         0, eachLine.topY,
-    //                         this.canvas.width,
-    //                         this.height
-    //                     );
-    //                     this.gameCtx.strokeRect(
-    //                         0, eachLine.topY,
-    //                         this.canvas.width,
-    //                         this.height);
-
-    //                     audioElement.volume = 0.05;
-    //                     audioElement.play();
-
-    //                 } else {
-    //                     // this.drawAllLines();
-    //                     this.gameCtx.shadowColor = "transparent";
-    //                     eachLine.drawHorizontalLine(this.gameCtx);
-    //                 }
-    //                 // audioElement.pause();
-    //                 // this.gameCtx.shadowColor = "transparent";
-    //             });
-    //         }, 1000 / 100);
-
-
-
-
-    //         setTimeout(() => {
-    //             clearInterval(intervalId);
-    //             audioElement.pause();
-    //             this.gameCtx.shadowColor = "transparent";
-    //             this.changePositions();
-    //             this.gameCtx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    //             this.drawAllLines();
-    //         }, 1000 / 10);
-
-    //     }
-    // }
 
     /**
      *  Draw all slabs that reached the bottom of the canvas
@@ -384,24 +363,46 @@ class SSGame {
         }
     }
 
-    changePositions() {
-        let index = -1;
-        if (this.arrAllLines.some((ele) => (ele.arrSlabs.length === this.canvas.width / 25))) {
+    // old working 
+    // changePositions() {
+    //     let index = -1;
+    //     if (this.arrAllLines.some((ele) => (ele.arrSlabs.length === this.canvas.width / 25))) {
 
-            index = this.arrAllLines.findIndex((ele) => (ele.arrSlabs.length === this.canvas.width / 25));
-            // console.log(`removeFilledLine() ->  line ${index} is filled `);
-            this.arrAllLines.forEach((ele, idx) => {
-                // console.log(`Before change: ${idx}: top-y: ${ele.topY} , bottom-y: ${ele.bottomY}`);
-                // if (index != idx) {
-                if (index < idx) {
-                    ele.bottomY += 25;
-                    ele.topY += 25;
+    //         index = this.arrAllLines.findIndex((ele) => (ele.arrSlabs.length === this.canvas.width / 25));
+    //         // console.log(`removeFilledLine() ->  line ${index} is filled `);
+    //         this.arrAllLines.forEach((ele, idx) => {
+    //             // console.log(`Before change: ${idx}: top-y: ${ele.topY} , bottom-y: ${ele.bottomY}`);
+    //             // if (index != idx) {
+    //             if (index < idx) {
+    //                 ele.bottomY += 25;
+    //                 ele.topY += 25;
+    //                 ele.changeSlabPosition(ele.topY);
+    //             }
+    //             // console.log(`After change: ${idx}: top-y: ${ele.topY} , bottom-y: ${ele.bottomY}`);
+    //         });
+    //         // remove filled lines
+    //         this.arrAllLines = this.arrAllLines.filter((ele) => ((ele.arrSlabs.length != this.canvas.width / 25)));
+    //     }
+    // }
+
+    changePositions() {
+
+        if (this.arrAllLines.some((ele) => (ele.isLineFull))) {
+            let cntLinesFilled = 0;
+            this.arrAllLines.forEach((ele) => {
+                if (ele.isLineFull) {
+                    cntLinesFilled++;
+                } else {
+                    ele.bottomY += (cntLinesFilled * 25);
+                    ele.topY += (cntLinesFilled * 25);
                     ele.changeSlabPosition(ele.topY);
                 }
-                // console.log(`After change: ${idx}: top-y: ${ele.topY} , bottom-y: ${ele.bottomY}`);
             });
-            // remove filled lines
-            this.arrAllLines = this.arrAllLines.filter((ele) => ((ele.arrSlabs.length != this.canvas.width / 25)));
+            console.log("--- after position change ----");
+            this.printallLines();
+            this.arrAllLines = this.arrAllLines.filter((ele) => (!ele.isLineFull));
+            console.log("--- after filter change ----");
+            this.printallLines();
         }
     }
 
@@ -415,15 +416,12 @@ class SSGame {
             this.arrAllLines = this.arrAllLines.map((ele, idx) => {
                 if (ele.arrSlabs.length === this.canvas.width / 25) {
                     ele.isLineFull = true;
+                    this.score += 50;
                 }
-                console.log(`After set to treu: ${idx}: top-y: ${ele.topY} , bottom-y: ${ele.bottomY}`);
                 return ele;
             });
-
-            this.score += 50;
-            return true;
-        } else {
-            return false;
+            console.log("--- after setfilled change ----");
+            this.printallLines();
         }
     }
 
@@ -450,7 +448,6 @@ class SSGame {
             this.gameCtx.font = "30px Impact";
             this.gameCtx.fillStyle = "#f44336";
             this.gameCtx.fillText("Score: " + this.score, (this.canvas.width / 2) - 75, (this.canvas.height / 2) - 100);
-
         };
 
         const btn = document.querySelector(".btn-game");

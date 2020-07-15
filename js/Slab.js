@@ -90,9 +90,7 @@ class Slab {
             );
             if (this.noOfSlabs === 2) {
                 if (this.slabsAlign === 'H') {
-                    console.log(
-                        ` inside drawSlab() --- x:  ${this.xPosition + this.width}   y: ${this.yPosition}  , ${ this.color}`
-                    );
+                    // console.log(` inside drawSlab() --- x:  ${this.xPosition + this.width}   y: ${this.yPosition}  , ${ this.color}`);
                     this.gameCtx.fillStyle = this.color; //"red";
                     this.gameCtx.fillRect(
                         this.xPosition + this.width,
@@ -109,9 +107,7 @@ class Slab {
                         this.height
                     );
                 } else if (this.slabsAlign === 'V') {
-                    console.log(
-                        ` inside drawSlab() --- x:  ${this.xPosition + this.width}   y: ${this.yPosition}  , ${ this.color}`
-                    );
+                    // console.log(` inside drawSlab() --- x:  ${this.xPosition + this.width}   y: ${this.yPosition}  , ${ this.color}`);
                     this.gameCtx.fillStyle = this.color; //"red";
                     this.gameCtx.fillRect(
                         this.xPosition,
@@ -129,15 +125,8 @@ class Slab {
                     );
                 }
             }
-
-            // this.gameCtx.stroke();
-            // this.gameCtx.shadowBlur = 20;
-            // this.gameCtx.lineWidth = 2;
-            // this.gameCtx.strokeRect(this.xPosition, this.yPosition, this.width, this.height);
         };
-        // console.log(
-        // ` inside drawSlab() --- x:  ${this.xPosition}   y: ${this.yPosition}  , ${ this.color}`
-        // );
+        // console.log( ` inside drawSlab() --- x:  ${this.xPosition}   y: ${this.yPosition}  , ${ this.color}` );
     }
 
     /**
@@ -145,15 +134,15 @@ class Slab {
      */
     clearSlab() {
         if (this.game.isSlabFalling) {
-            console.log(" clearSlab()  : " + this.xPosition + "  " + this.yPosition);
+            // console.log(" clearSlab()  : " + this.xPosition + "  " + this.yPosition);
             this.gameCtx.clearRect(
                 this.xPosition - 2,
                 this.yPosition - 2,
                 this.width + 4,
                 this.height + 4
             );
-            if (this.noOfSlabs === 2 && this.slabsAlign === 'H') {
-                console.log(" clearSlab()  : " + this.xPosition + this.width + "  " + this.yPosition);
+            if (this.slabsAlign === 'H') {
+                // console.log(" clearSlab()  : " + this.xPosition + this.width + "  " + this.yPosition);
                 this.gameCtx.clearRect(
                     (this.xPosition + this.width) - 2,
                     this.yPosition - 2,
@@ -161,7 +150,15 @@ class Slab {
                     this.height + 4
                 );
             }
-
+            if (this.slabsAlign === 'V') {
+                // console.log(" clearSlab()  : " + this.xPosition + this.width + "  " + this.yPosition);
+                this.gameCtx.clearRect(
+                    this.xPosition - 2,
+                    (this.yPosition + this.height) - 2,
+                    this.width + 4,
+                    this.height + 4
+                );
+            }
         }
     }
 
@@ -175,14 +172,13 @@ class Slab {
         this.game.isSlabFalling = true;
         this.xPosition = xPos;
         this.color = color || this.color;
-        // this.drawSlab(this.xPosition);
+
         this.movetimer = setInterval(() => {
             if (this.game.isSlabFalling) {
                 this.drawSlab(this.xPosition, this.color);
                 this.clearSlab();
             }
 
-            // if (this.game.isLineCollision(this) === true) {
             if (this.checkLineCollision()) {
                 this.game.isCanvasTouched = false;
                 this.stopSlab();
@@ -192,7 +188,7 @@ class Slab {
             } else {
                 this.yPosition += 25;
             }
-        }, 1000 / 8); // 8
+        }, 1000 / 10); // 15
     }
 
     /**
@@ -213,8 +209,8 @@ class Slab {
     checkCanvasCollision() {
         // if ((this.yPosition + this.height) >= this.canvasHeight) {
 
-        if (this.canvasHeight - this.yPosition <= this.height ||
-            this.noOfSlabs > 1 && this.slabsAlign == "V" && (this.canvasHeight - (this.yPosition + this.height) <= this.height)) {
+        if ((this.canvasHeight - this.yPosition <= this.height) ||
+            (this.slabsAlign == "V" && (this.canvasHeight - (this.yPosition + this.height) <= this.height))) {
             console.log(" slab collided with canvas");
             this.game.isSlabFalling = false;
             return true;
@@ -258,37 +254,48 @@ class Slab {
                         // alert(this.game.isLeftSideCollision(this));
                         // console.log(`is slab colliding to left slab ${!this.game.isLeftSideCollision(this)} , slabx: ${this.xPosition} , slaxY: ${this.yPosition}`);
                         // || this.game.isLeftSideCollision(this)
-                        if (this.xPosition >= this.width &&
-                            !this.game.isLeftSideCollision(this)
-                        ) {
+                        if (this.xPosition >= this.width && !this.game.isLeftSideCollision(this)) {
                             this.xPosition -= this.width;
                             this.playSlabMove();
                         }
                         break;
 
                     case 39: // arrow right
-                        if (
-                            this.canvasWidth - this.xPosition > (this.width * this.noOfSlabs) &&
-                            !this.game.isRightSideCollision(this)
-                        ) {
-                            this.xPosition += this.width;
-                            this.playSlabMove();
+                        if (this.slabsAlign === 'V') {
+                            if (this.canvasWidth - this.xPosition > (this.width) &&
+                                !this.game.isRightSideCollision(this)) {
+                                this.xPosition += this.width;
+                                this.playSlabMove();
+                            }
+                        } else {
+                            if (this.canvasWidth - this.xPosition > (this.width * this.noOfSlabs) &&
+                                !this.game.isRightSideCollision(this)) {
+                                this.xPosition += this.width;
+                                this.playSlabMove();
+                            }
                         }
-                        console.log(" moed right");
+                        // console.log(" moved right");
                         break;
 
-                    case 40:
-                        if (
-                            this.yPosition + this.height < this.canvasHeight &&
-                            !this.game.isBottomSideCollision(this)
-                        ) {
-                            this.yPosition += this.height;
-                            this.playSlabMove();
+                    case 40: // move bottom                      
+                        if (this.slabsAlign === 'V') {
+                            if (this.yPosition + (this.height * this.noOfSlabs) < this.canvasHeight &&
+                                !this.game.isBottomSideCollision(this)) {
+                                // console.log(" move bottom for V " + this.yPosition);
+                                this.yPosition += this.height;
+                                this.playSlabMove();
+                            }
+                        } else {
+                            if (this.yPosition + this.height < this.canvasHeight &&
+                                !this.game.isBottomSideCollision(this)) {
+                                // console.log(" move bottom for normal " + this.yPosition);
+                                this.yPosition += this.height;
+                                this.playSlabMove();
+                            }
                         }
-
                         break;
                 }
-                console.log(" moveslab() -- " + event.keyCode);
+                // console.log(" moveslab() -- " + event.keyCode);
                 this.drawSlab(this.xPosition);
             }
         };
