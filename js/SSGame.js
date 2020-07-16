@@ -78,7 +78,7 @@ class SSGame {
                 this.simpleSlab.moveSlab();
             }
             if (this.checkTopCollision()) {
-                console.log(`collised with top game over !! ${this.arrAllLines.length} `);
+                // console.log(`collised with top game over !! ${this.arrAllLines.length} `);
                 this.stopGame();
             }
         }, 1000 / 1); // 1
@@ -99,9 +99,9 @@ class SSGame {
         // this.randXPos = (this.randXPos < 25 ? 0 : Math.floor(this.randXPos / 25)) * 25;
         this.randXPos = Math.floor(this.width / 2);
         let slabCnt = Math.floor(Math.random() * 3);
-        // let slabCnt = 2; //-- for testing purpose
+        // let slabCnt = 0; //-- for testing purpose
         slabCnt++;
-        console.log(" slab count: " + slabCnt);
+        // console.log(" slab type : " + slabCnt);
         this.simpleSlab = new Slab();
         this.simpleSlab.setGame(this, slabCnt);
         this.simpleSlab.draw(this.randXPos, this.colors[(Math.floor(Math.random() * this.colors.length))]);
@@ -131,13 +131,13 @@ class SSGame {
             this.addVerticalSlab(slab);
             newLine.addSlab(slab);
             this.arrAllLines.push(newLine);
-        } else if (this.arrAllLines[arrLen - 1].topY === slab.yPosition + slab.height) {
+        } else if ((this.arrAllLines[arrLen - 1].topY === slab.yPosition + slab.height)) {
             let newLine = new SSFilledLine();
-            if (slab.slabsAlign === 'V') {
-                this.addVerticalSlab(slab);
-            }
             newLine.addSlab(slab);
             this.arrAllLines.push(newLine);
+            if (slab.slabsAlign === 'V') {
+                this.addBelowSlabtoLine(slab);
+            }
         } else {
             console.log(" addSlabToLines : case 3 ");
             // slab hit a line that is not the top
@@ -331,11 +331,11 @@ class SSGame {
      */
     drawPartialLines() {
         // this.gameCtx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        console.log("drawPartialLines: " + this.arrAllLines.length);
+        // console.log("drawPartialLines: " + this.arrAllLines.length);
         if (this.arrAllLines.length > 0) {
             this.arrAllLines.forEach((eachLine, idx) => {
                 if (!eachLine.isLineFull) {
-                    console.log(` while drawing : ${idx}: top-y: ${eachLine.topY} , bottom-y: ${eachLine.bottomY}`);
+                    // console.log(` while drawing : ${idx}: top-y: ${eachLine.topY} , bottom-y: ${eachLine.bottomY}`);
                     eachLine.drawHorizontalLine(this.gameCtx);
                 }
             });
@@ -343,7 +343,7 @@ class SSGame {
     }
 
     drawFilledLines() {
-        console.log("drawFilledLines: " + this.arrAllLines.length);
+        // console.log("drawFilledLines: " + this.arrAllLines.length);
         if (this.arrAllLines.length > 0) {
             this.arrAllLines.forEach((eachLine, idx) => {
                 if (eachLine.isLineFull) {

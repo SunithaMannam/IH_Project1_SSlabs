@@ -211,7 +211,7 @@ class Slab {
 
         if ((this.canvasHeight - this.yPosition <= this.height) ||
             (this.slabsAlign == "V" && (this.canvasHeight - (this.yPosition + this.height) <= this.height))) {
-            console.log(" slab collided with canvas");
+            // console.log(" slab collided with canvas");
             this.game.isSlabFalling = false;
             return true;
             // clearTimeout(this.movetimer);

@@ -102,7 +102,7 @@ class SSFilledLine {
      * @param {} context 
      */
     drawHorizontalLine(context) {
-        console.log(" drawHorizontalLine() called " + this.arrSlabs.length);
+        // console.log(" drawHorizontalLine() called " + this.arrSlabs.length);
         this.context = context;
         if (!this.isLineFull) {
 
@@ -145,7 +145,7 @@ class SSFilledLine {
     isRightFull(slab) {
         let retVal = false;
         this.arrSlabs.forEach((ele) => {
-            console.log("isRightFull() --  " + ele.xPosition + " slab-Y: " + slab.yPosition + "slab-x: " + slab.xPosition);
+            // console.log("isRightFull() --  " + ele.xPosition + " slab-Y: " + slab.yPosition + "slab-x: " + slab.xPosition);
             if (slab.slabsAlign === 'H') {
                 if ((slab.xPosition + slab.width === ele.xPosition - slab.width) && (ele.yPosition === slab.yPosition)) {
                     retVal = true;
@@ -168,7 +168,7 @@ class SSFilledLine {
      */
     isBottomFull(slab) {
         let retVal = false;
-        console.log(" inBottomFull: " + slab.noOfSlabs)
+        // console.log(" inBottomFull: " + slab.noOfSlabs)
         this.arrSlabs.forEach((ele) => {
             if (slab.slabsAlign === 'V') {
                 if ((ele.yPosition - (slab.height * slab.noOfSlabs) === slab.yPosition) && (ele.xPosition === slab.xPosition)) {
@@ -178,11 +178,10 @@ class SSFilledLine {
                 if ((ele.yPosition - slab.height === slab.yPosition) && (ele.xPosition === (slab.xPosition + slab.width))) {
                     retVal = true;
                 }
-            }
+            } else
             if ((ele.yPosition - slab.height === slab.yPosition) && (ele.xPosition === slab.xPosition)) {
                 retVal = true;
             }
-
 
         });
         return retVal;
