@@ -1,16 +1,12 @@
 body {
   margin-top: 50px;
   margin-left: 100px;
-}
-
-#inner-body {
-  width: 900px;
-  height: 600px;
-  display: flex;
-  flex-direction: row;
-  background-color: bisque;
-  border: 2px solid black;
-  padding-top: 50px;
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.5),
+      rgba(255, 255, 255, 0.5)
+    ),
+    url("./../images/body_bg.PNG"),
+    repeating-linear-gradient(45deg, #2196f3, transparent 100px);
 }
 
 div {
@@ -18,7 +14,41 @@ div {
   height: 600px;
   display: inline-block;
   padding: 0 50px 0 50px;
-  margin: 0 20px 0 20px;
+  /* margin: 0 20px 0 20px; */
+}
+
+#inner-body {
+  width: 900px;
+  height: 500px;
+  display: flex;
+  flex-direction: row;
+  background-color: bisque;
+  border: 2px #673ab7 solid;
+  padding-top: 30px;
+  margin-left: 200px;
+  border-radius: 40px;
+  border-width: 3px;
+}
+
+#instr-body {
+  width: 900px;
+  height: 120px;
+  display: flex;
+  flex-direction: row;
+  background-color: bisque;
+  border: 2px #673ab7 solid;
+  margin-left: 200px;
+  margin-bottom: 30px;
+  border-radius: 40px;
+  border-width: 3px;
+}
+
+#instr-body table {
+  width: 80%;
+}
+
+#instr-body span {
+  color: rgb(194, 39, 39);
 }
 
 #logo-img {
@@ -39,6 +69,7 @@ div {
   color: aliceblue;
   font-weight: bolder;
   margin-left: 90px;
+  margin-bottom: 30px;
 }
 
 .btn-game:hover {
@@ -48,52 +79,34 @@ div {
   box-shadow: 8px 8px 0 rgba(190, 195, 199, 0.2);
 }
 
-#instr {
+.instr {
   font-size: 18px;
   font-family: fantasy;
-  margin-top: 40px;
-  margin-left: 40px;
   color: #155ddf;
 }
 
-#ss-canvas {
+#score-board {
   display: none;
-  opacity: 0.7;
-  border: dashed 3px #1111e0;
-  margin-top: 100px;
-  background-image: url("./../images/slab_background.jpg");
+  padding-top: 20px;
+  text-align: -webkit-left;
 }
 
-/* #logo-img {
-  width: 300px;
-  height: 300px;
-}
-
-.btn-game {
-  border: 2px solid #eee;
-  background-color: #5eb1fff0;
-  box-sizing: border-box;
-  box-shadow: 8px 8px 0 rgba(59, 180, 251, 0.2);
-  padding: 20px 20px 20px 20px;
-  width: 20%;
-  margin: 20px 5% 0 80px;
-  font-size: larger;
-  color: aliceblue;
-  font-weight: bolder;
-  margin-left: 90px;
-}
-
-.btn-game:hover {
-  border: 2px solid #908d8d;
-  background-color: #ccd3d9f0;
-  color: #266ca9;
-  box-shadow: 8px 8px 0 rgba(190, 195, 199, 0.2);
+#game-section p {
+  display: none;
 }
 
 #ss-canvas {
   display: none;
+  margin-top: 50px;
+}
+.game-start {
   opacity: 0.7;
   border: dashed 3px #1111e0;
-    margin-top: 100px;  
   background-image: url("./../images/slab_background.jpg");
-} */
+}
+
+.gameover {
+  opacity: 0.9;
+  border: solid 3px #1111e0;
+  background-image: url("./../images/tetris.gif");
+}

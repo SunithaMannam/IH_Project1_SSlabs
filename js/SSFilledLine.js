@@ -38,7 +38,7 @@ class SSFilledLine {
                     temp--;
                 }
             }
-        } else { // if (this.topY) 
+        } else {
             this.arrSlabs.push(slab);
             let temp = slab.noOfSlabs;
             temp--;
@@ -93,7 +93,6 @@ class SSFilledLine {
                 retVal = true;
             }
         });
-        // console.log(" isslotFull():  " + retVal);
         return retVal;
     }
 
@@ -107,8 +106,6 @@ class SSFilledLine {
         if (!this.isLineFull) {
 
             this.arrSlabs.forEach((eachSlab) => {
-
-                // eachSlab.drawSlab(eachSlab.xPosition);              
                 eachSlab.drawSlab();
             });
         }
@@ -160,6 +157,7 @@ class SSFilledLine {
         return retVal;
     }
 
+
     /**
      * checks whether the bottom place of the slab ( in parameter) is filled or not,
      * so that we can mvoe the slab to bottom
@@ -168,21 +166,19 @@ class SSFilledLine {
      */
     isBottomFull(slab) {
         let retVal = false;
-        // console.log(" inBottomFull: " + slab.noOfSlabs)
         this.arrSlabs.forEach((ele) => {
             if (slab.slabsAlign === 'V') {
                 if ((ele.yPosition - (slab.height * slab.noOfSlabs) === slab.yPosition) && (ele.xPosition === slab.xPosition)) {
                     retVal = true;
                 }
             } else if (slab.slabsAlign === 'H') {
-                if ((ele.yPosition - slab.height === slab.yPosition) && (ele.xPosition === (slab.xPosition + slab.width))) {
+                if ((ele.yPosition - slab.height === slab.yPosition) && (ele.xPosition === (slab.xPosition + slab.width) || ele.xPosition === slab.xPosition)) {
                     retVal = true;
                 }
             } else
             if ((ele.yPosition - slab.height === slab.yPosition) && (ele.xPosition === slab.xPosition)) {
                 retVal = true;
             }
-
         });
         return retVal;
     }
@@ -198,7 +194,7 @@ class SSFilledLine {
                 retVal = true;
             }
         });
-        // console.log(" checkTopCollision():  " + retVal);
         return retVal;
     }
+
 }

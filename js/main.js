@@ -22,6 +22,8 @@ window.onload = function () {
         btn.innerText = 'STOP GAME';
         const screen = document.querySelector("#ss-canvas");
         screen.style.display = 'inline';
+        const score = document.querySelector("#score-board");
+        score.style.display = 'contents';
         btn.blur();
         game = new SSGame();
         game.init();
@@ -39,8 +41,9 @@ window.onload = function () {
 };
 
 /**
+ * 1. music for full game
+ * 2. splash screen for gam over
+ * 3. animation for the front end  pages ( from michel)
+ * 4. space bar and instructions for the pause and play game 
  * 
- *  1. screen  flickering
-    2.   
-    3.  background image for the body 
  */

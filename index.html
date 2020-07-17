@@ -1,53 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sliding Slabs</title>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sliding Slabs</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
 
-  <link rel="stylesheet" href="css/style.css" />
+  <body>
+    <audio id="game-end">
+      <source src="sound/game-end.mp3" type="audio/mpeg" />
+    </audio>
+    <audio id="slab-move">
+      <source src="sound/game-end.mp3" type="audio/mpeg" />
+    </audio>
+    <audio id="line-full">
+      <source src="sound/game-end.mp3" type="audio/mpeg" />
+    </audio>
 
-</head>
+    <div id="instr-body">
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              <img src="./images/keys.png" width="40" height="40" alt="" />
+            </td>
+            <td>
+              <p class="instr">
+                Use the left, right and down arrow to control falling Slabs!
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <img src="./images/space.png" width="70" height="30" alt="" />
+            </td>
+            <td>
+              <p class="instr">
+                Use Space Bar to <span> pause </span> the game
+              </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-<body>
-  <audio id="game-end">
-    <source src="sound/game-end.mp3" type="audio/mpeg" />
-  </audio>
-  <audio id="slab-move">
-    <source src="sound/game-end.mp3" type="audio/mpeg" />
-  </audio>
-  <audio id="line-full">
-    <source src="sound/game-end.mp3" type="audio/mpeg" />
-  </audio>
-
-  <div id="inner-body">
-
-    <section id="game-intro">
-      <div id="logo-space">
-        <img id="logo-img" src="./images/slab_logo.PNG" alt="" />
+      <div id="score-board">
         <br />
-        <button class="btn-game start">START GAME</button>
-        <br />
-        <p id="instr">Use the left and right arrow to control Slabs!</p>
+        <p class="instr">SCORE</p>
       </div>
-    </section>
+    </div>
 
-    <section id="game-sec">
-      <div id="game-space">
-        <!-- <canvas id="ss-canvas" width="200" height="200"> -->
-        <!-- <canvas id="ss-canvas" width="250" height="350"> </canvas> -->
-        <canvas id="ss-canvas" width="250" height="450"> </canvas>
-      </div>
-    </section>
+    <div id="inner-body">
+      <section id="game-intro">
+        <div id="logo-space">
+          <img
+            id="logo-img"
+            width="15"
+            height="15"
+            src="./images/slab_logo.PNG"
+            alt=""
+          />
+          <br />
+          <button class="btn-game start">START GAME</button>
+          <br />
+        </div>
+      </section>
 
-  </div>
+      <section id="game-sec">
+        <!-- <div id="score-board">
+          <p class="instr">SCORE:</p>
+        </div> -->
+        <div>
+          <!-- <canvas id="ss-canvas" width="200" height="200"> -->
+          <canvas id="ss-canvas" class="game-start" width="300" height="400">
+          </canvas>
+        </div>
+      </section>
+    </div>
+  </body>
 
-</body>
-
-<script src="js/main.js"></script>
-<script src="js/Slab.js"></script>
-<script src="js/SSFilledLine.js"></script>
-<script src="js/SSGame.js"></script>
-
+  <script src="js/main.js"></script>
+  <script src="js/Slab.js"></script>
+  <script src="js/SSFilledLine.js"></script>
+  <script src="js/SSGame.js"></script>
 </html>
