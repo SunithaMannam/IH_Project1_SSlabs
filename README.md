@@ -26,12 +26,11 @@ It is a block matching game (influenced by Tetris game), where small square slab
 <h4> Index.html </h4>
 <pre> Html page to display the ‘Game Title’, ‘Start/Stop button” and the game screen </pre>
 
-<h4> Script.js	</h4> 
-<pre><ul><li> startGame() </li><li>creates SSGameScreen Object and starts the screen	</li><li> event listeners for ‘Start’ and ‘Stop’ buttons </li><li> stopGame() {}</li></ul></pre>
-<h4>SSGameScreen.js</h4><pre><ul><li>constructor() {Canvas-context;Canvas-element;Canvas-width;Canvas-height;Object of SSGame} </li><li>initScreen() {} </li><li>startScreen() </li><li>setInterval_1() { // draws and moves the falling slabs} </li><li>setinterval_2(){//draws the incomplete horizontal lines; checks for collisions } </li></ul></pre>
-<h4>SSGame.js</h4><pre><ul><li>constructor() {Array of Objects SSHorizontalLine;Object of SimpleSlab} </li><li>initGame() </li><li>startGame() {} </li><li>clearFilledLines(){//checks the array to look fully built lines and deletes the fully built lines} </li></ul></pre>
-<h4>SSHorizontalLine.js</h4><pre><ul><li>constructor() {	number of squares;	array of SimpleSlab objects;top-y-point;bottom-y-point} </li><li>isLineFilled() {// checks whether the horizontal line if fully built or not} </li><li>drawHorizontalLine(){ // draws the horizontal line} </li><li>clearsHorizontalLine() {//  clears the horizonatal line} </li></ul></pre>
-<h4>SimpleSlab.js</h4><pre><ul><li>constructor() {x-position;y-position;width;height;} </li><li>drawFallingSlab() {}</li><li>drawSlab(){} </li><li>clearSlab() {}</li><li>moveSlab(){}</li><li>checkColisionBottom(){// checks collision with canvas bottom}</li><li>checkLineCollision(array of horizontal lines){ //checks collision with any of the lines }</li></ul></pre>
+<h4> main.js	</h4> 
+<pre><ul><li>startGame(){} </li><li>creates SSGameScreen Object and starts the screen</li><li>Event listeners for ‘Start’ and ‘Stop’ buttons </li><li>stopGame() {}</li></ul></pre>
+<h4>SSGame.js</h4><pre><ul><li>constructor() {Array of Objects SSHorizontalLine;Object of SimpleSlab;canvas-context;canvas-element;Canvas-width;Canvas-height;} </li><li>initGame(){}</li><li>startGame() {//Set Interval,[checks for collison of slab with canvas or lines at the bottom],[checks for fully built lines,clears them,draw the partially built and fully built lines],[triggers a new falling slab and retriggers a new one once the previous one collides]} </li><li>clearFilledLines(){//checks the array for completed lines and deletes the fully built lines} </li><li>addSabsToLines(){//adds the collided slabs to the horizontal lines array}</li><li>isLineCollision(){//checks whether slab collided with any horizontalline}</li><li>isRightCollision(){//checks whether slab collided with any right side blocks or right side of canvas}</li><li>isLeftCollision(){//checks whether slab collided with any left side blocks or left side of canvas}</li><li>stopGame(){}</li><li>changePositions(){//change the positions of the slabs after deleting the flly formed lines}</li></ul></pre>
+<h4>SSHorizontalLine.js</h4><pre><ul><li>constructor() {array of SimpleSlab objects that are in each line;top-y-point;bottom-y-point} </li><li>isLineFilled() {// checks whether the horizontal line if fully built or not} </li><li>drawHorizontalLine(){ // draws the horizontal line} </li><li>addSlab() {//adds the slab into the array of slabs(line)} </li></ul></pre>
+<h4>SimpleSlab.js</h4><pre><ul><li>constructor() {x-position;y-position;width;height;} </li><li>drawSlab(){} </li><li>clearSlab() {}</li><li>startSlab() {//steInterval that draws the falling slab and cheks for collison of slab with canvas or with lines}</li><li>moveSlab(){//moves slab to left,right,down}</li><li>checkColisionBottom(){// checks collision with canvas bottom}</li><li>checkLineCollision(array of horizontal lines){ //checks collision with any of the lines }</li><li>stopSlab() {}</li></ul></pre>
 
 # States and States Transitions
 
@@ -39,8 +38,7 @@ It is a block matching game (influenced by Tetris game), where small square slab
 
 # Tasks
 
-<ul><li>Script - startGame()</li><li>Script - stopGame()</li><li>SSGameScreen - initScreen()</li><li>SSGameScreen - startScreen()</li><li>SSGameScreen - timer_1()</li><li>SSGameScreen - timer_2()</li><li>SSGame - constructor()</li><li>SSGame - initGame()</li><li>SSGame - startGame()</li><li>SSHorizontalLine - constructor()</li> <li>SSHorizontalLine - isLineFilled()</li><li>SSHorizontalLine - drawHorizontalLine()</li><li>SSHorizontalLine - clearsHorizontalLine()</li><li>SimpleSlab - constructor()</li> 
-<li>SimpleSlab - drawFallingSlab()</li><li>SimpleSlab - drawSlab()</li><li>SimpleSlab - clearSlab()</li><li>SimpleSlab - moveSlab()</li><li>SimpleSlab - checkColisionBottom()</li><li>SimpleSlab - checkLineCollision()</li></ul>
+<ul><li>Script - startGame()</li><li>Script - stopGame()</li><li>SSGameScreen - initScreen()</li><li>SSGame - constructor()</li><li>SSGame - initGame()</li><li>SSGame - startGame()</li><li>SSGame - addSlabsToLine()</li><li>SSGame - checksLineCollision()</li><li>SSGame - drawLines()</li><li>SSGame - changePositions()</li><li>SSGame - endGame()</li><li>SSHorizontalLine - constructor()</li> <li>SSHorizontalLine - isLineFilled()</li><li>SSHorizontalLine - addSlabs()</li><li>SSHorizontalLine - clearsHorizontalLine()</li><li>SimpleSlab - constructor()</li><li>SimpleSlab - drawFallingSlab()</li><li>SimpleSlab - drawSlab()</li><li>SimpleSlab - clearSlab()</li><li>SimpleSlab - moveSlab()</li><li>SimpleSlab - checkCanvasCollision()</li><li>SimpleSlab - checkLineCollision()</li></ul>
 
 # Links
 
@@ -48,3 +46,4 @@ It is a block matching game (influenced by Tetris game), where small square slab
  <h4>Git</h4> <p>URls for the project repo and deploy
 <a href="https://github.com/SunithaMannam/IH_Project1_SSlabs">Link Repo</a>
 <a href="https://sunithamannam.github.io/IH_Project1_SSlabs/" >Link Deploy</a></p>
+<h4>Presentation</h4> <a href="https://docs.google.com/presentation/d/1FZwvXnQtjhBROV8tNWwIGT7Sc4TGuVY0kmGgS-2KVlc/edit#slide=id.p" alt="">Presentation</a>
